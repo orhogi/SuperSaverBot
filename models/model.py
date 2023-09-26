@@ -56,19 +56,6 @@ class User(Base):
         return cur.fetchone()
 
 
-class Insta(Base):
-
-    def create_media(self, url: str, media: str, post: str, types: str):
-        query = f"INSERT INTO {self.table}(url, media, post, types) VALUES (%s, %s, %s, %s)"
-        cur.execute(query, (url, media, post, types))
-        conn.commit()
-
-    def update_media(self, url: str, media: str, post: str, types: str):
-        query = f"UPDATE {self.table} SET url = %s, media = %s, post = %s, types = %s WHERE url = %s"
-        cur.execute(query, (url, media, post, url, types))
-        conn.commit()
-
-
 class Pin(Base):
     def create_media(self, url: str, media: str, types: str):
         query = f"INSERT INTO {self.table}(url, media, types) VALUES (%s, %s, %s)"
@@ -81,7 +68,7 @@ class Pin(Base):
         conn.commit()
 
 
-class LikeeTik(Base):
+class InstaLikeeTik(Base):
     def create_media(self, url: str, media: str):
         query = f"INSERT INTO {self.table}(url, media) VALUES (%s, %s)"
         cur.execute(query, (url, media))
@@ -91,7 +78,3 @@ class LikeeTik(Base):
         query = f"UPDATE {self.table} SET url = %s, media = %s WHERE url = %s"
         cur.execute(query, (url, media, url))
         conn.commit()
-
-
-user = User('users')
-print(user.get_medias())

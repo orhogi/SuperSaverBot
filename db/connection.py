@@ -1,6 +1,8 @@
+from os import getenv
+
 import psycopg2
 from dotenv import load_dotenv
-from os import getenv
+from psycopg2.extras import DictCursor
 
 load_dotenv()
 conn = psycopg2.connect(
@@ -8,7 +10,8 @@ conn = psycopg2.connect(
     database=getenv('DATABASE'),
     password=getenv('PASSWORD'),
     host=getenv('HOST'),
-    port=getenv('PORT')
+    port=getenv('PORT'),
+    cursor_factory=DictCursor
 )
 cur = conn.cursor()
 
@@ -27,8 +30,6 @@ def create_db():
         id BIGSERIAL PRIMARY KEY,
         url VARCHAR(300) UNIQUE,
         media VARCHAR(1000),
-        post VARCHAR(15) NOT NULL,
-        types VARCHAR(15) NOT NULL,
         created_at TIMESTAMP DEFAULT now()
         )'''
     pin_query = '''

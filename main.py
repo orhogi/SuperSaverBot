@@ -5,12 +5,15 @@ import requests
 from aiogram import Bot, Dispatcher, types, executor
 from aiogram.contrib.fsm_storage.memory import MemoryStorage
 from aiogram.dispatcher.filters import Text
+from aiogram.dispatcher import FSMContext
 from aiogram.types import BotCommand
 from dotenv import load_dotenv
 
 from data.api import UniversalAPI
-from data.crud import user_create
+from data.crud import user_create, user_statistic, all_users
 from db.connection import create_db
+from keyboards.admin_keyboards import admin_btn, exit_btn
+from states.state import ReklamaState
 
 api = UniversalAPI()
 load_dotenv()
@@ -51,38 +54,61 @@ async def info_handler(msg: types.Message):
         text=f"𝐒𝐢𝐳𝐧𝐢𝐧𝐠 𝐌𝐚'𝐥𝐮𝐦𝐨𝐭𝐥𝐚𝐫𝐢𝐧𝐠𝐢𝐳 🗂\nɪᴅ: {msg.from_user.id}\nɪsᴍ: {msg.from_user.first_name}\nᴜsᴇʀɴᴀᴍᴇ: {'@' + msg.from_user.username if msg.from_user.username else '❌'}\n\n@Super_saverBot - 𝙱𝚒𝚣 𝚋𝚒𝚕𝚊𝚗 𝚑𝚊𝚖𝚖𝚊𝚜𝚒 𝚘𝚜𝚘𝚗 📥")
 
 
-@dp.message_handler(Text("📊 Statistika"))
-async def statistika(msg: types.Message):
-    users = []
-    await msg.answer(text=f'Foydalanuvchilar Soni: {len(users)}')
+@dp.message_handler(commands=['panel'])
+async def admin_panel(msg: types.Message):
+    if msg.from_user.id == int(getenv("ADMIN")):
+        await msg.answer(
+            text=f"𝐀𝐬𝐬𝐚𝐥𝐨𝐦𝐮 𝐚𝐥𝐚𝐲𝐤𝐮𝐦 {msg.from_user.full_name} 🤖\n𝙰𝚍𝚖𝚒𝚗 𝚜𝚊𝚑𝚒𝚏𝚊𝚐𝚊 𝚡𝚞𝚜𝚑 𝚔𝚎𝚕𝚒𝚋𝚜𝚒𝚣 🖇👤",
+            reply_markup=admin_btn())
+
+
+@dp.message_handler(Text("📊 Statistics"))
+async def user_statistic_handler(msg: types.Message):
+    if msg.from_user.id == int(getenv("ADMIN")):
+        data = user_statistic()
+        await msg.answer(text=data)
 
 
 @dp.message_handler(Text("🗣 Reklama"))
 async def reklama_handler(msg: types.Message):
-    await msg.answer(text="Reklama Bo'limi!")
+    if msg.from_user.id == int(getenv("ADMIN")):
+        await ReklamaState.rek.set()
+        await msg.answer(text="Reklama Tarqatish bo'limi 🤖", reply_markup=exit_btn())
 
 
-# @dp.message_handler(state=RekState.reklama, content_types=types.ContentType.ANY)
-# async def rek_state(msg: types.Message, state: FSMContext):
-#     await msg.answer(text="Reklama jo'natish boshlandi!")
-#     summa = 0
-#     query = 'SELECT * FROM users'  # noqa
-#     cur.execute(query)
-#     users = cur.fetchall()
-#     for i in users:
-#         query = 'SELECT * FROM admins'  # noqa
-#         cur.execute(query)
-#         admins = cur.fetchall()
-#         id_s = []
-#         for j in admins:
-#             id_s.append(int(j[1]))
-#         if int(i[1]) not in id_s:
-#             try:
-#                 await msg.copy_to(int(i[1]), caption=msg.caption, caption_entities=msg.caption_entities,
-#                                   reply_markup=msg.reply_markup)
-#             except:  # noqa
-#                 summa += 1
-#     await state.finish()
+@dp.message_handler(state=ReklamaState.rek, content_types=types.ContentType.ANY)
+async def rek_state(msg: types.Message, state: FSMContext):
+    if msg.text == "❌":
+        await msg.answer(text="Reklama yuborish bekor qilindi!", reply_markup=admin_btn())
+        await state.finish()
+    else:
+        await msg.answer(text="Reklama jo'natish boshlandi!")
+        users = all_users()
+        summa = 0
+        for i in users:
+            if int(i[1]) != int(getenv("ADMIN")):
+                try:
+                    await msg.copy_to(int(i[1]), caption=msg.caption, caption_entities=msg.caption_entities,
+                                      reply_markup=msg.reply_markup)
+                except:  # noqa
+                    summa += 1
+        await bot.send_message(int(getenv("ADMIN")), text=f"Botni Bloklagan userlar soni: {summa}")
+        await state.finish()
+
+
+@dp.message_handler(Text("📈 Media Statistics"))
+async def media_statistic_handler(msg: types.Message):
+    if msg.from_user.id == int(getenv("ADMIN")):
+        data = user_statistic()
+        await msg.answer(text=data)
+
+
+@dp.message_handler(Text("👤 Find User"))
+async def find_user_handler(msg: types.Message):
+    if msg.from_user.id == int(getenv("ADMIN")):
+        data = user_statistic()
+        await msg.answer(text=data)
+
 
 @dp.message_handler()
 async def result_handler(msg: types.Message):
