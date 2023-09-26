@@ -4,16 +4,16 @@ from os import getenv, path
 import requests
 from aiogram import Bot, Dispatcher, types, executor
 from aiogram.contrib.fsm_storage.memory import MemoryStorage
-from aiogram.dispatcher.filters import Text
 from aiogram.dispatcher import FSMContext
+from aiogram.dispatcher.filters import Text
 from aiogram.types import BotCommand
 from dotenv import load_dotenv
 
 from data.api import UniversalAPI
-from data.crud import user_create, user_statistic, all_users
+from data.crud import user_create, user_statistic, all_users, media_statistic, find_user
 from db.connection import create_db
 from keyboards.admin_keyboards import admin_btn, exit_btn
-from states.state import ReklamaState
+from states.state import ReklamaState, FindUser
 
 api = UniversalAPI()
 load_dotenv()
@@ -57,6 +57,7 @@ async def info_handler(msg: types.Message):
 @dp.message_handler(commands=['panel'])
 async def admin_panel(msg: types.Message):
     if msg.from_user.id == int(getenv("ADMIN")):
+        await bot.send_chat_action(msg.chat.id, types.ChatActions.TYPING)
         await msg.answer(
             text=f"𝐀𝐬𝐬𝐚𝐥𝐨𝐦𝐮 𝐚𝐥𝐚𝐲𝐤𝐮𝐦 {msg.from_user.full_name} 🤖\n𝙰𝚍𝚖𝚒𝚗 𝚜𝚊𝚑𝚒𝚏𝚊𝚐𝚊 𝚡𝚞𝚜𝚑 𝚔𝚎𝚕𝚒𝚋𝚜𝚒𝚣 🖇👤",
             reply_markup=admin_btn())
@@ -66,54 +67,74 @@ async def admin_panel(msg: types.Message):
 async def user_statistic_handler(msg: types.Message):
     if msg.from_user.id == int(getenv("ADMIN")):
         data = user_statistic()
+        await bot.send_chat_action(msg.chat.id, types.ChatActions.TYPING)
         await msg.answer(text=data)
 
 
 @dp.message_handler(Text("🗣 Reklama"))
 async def reklama_handler(msg: types.Message):
     if msg.from_user.id == int(getenv("ADMIN")):
+        await bot.send_chat_action(msg.chat.id, types.ChatActions.TYPING)
         await ReklamaState.rek.set()
-        await msg.answer(text="Reklama Tarqatish bo'limi 🤖", reply_markup=exit_btn())
+        await msg.answer(text="𝐑𝐞𝐤𝐥𝐚𝐦𝐚 𝐓𝐚𝐫𝐪𝐚𝐭𝐢𝐬𝐡 𝐛𝐨'𝐥𝐢𝐦𝐢 🤖", reply_markup=exit_btn())
 
 
 @dp.message_handler(state=ReklamaState.rek, content_types=types.ContentType.ANY)
 async def rek_state(msg: types.Message, state: FSMContext):
     if msg.text == "❌":
-        await msg.answer(text="Reklama yuborish bekor qilindi!", reply_markup=admin_btn())
+        await bot.send_chat_action(msg.chat.id, types.ChatActions.TYPING)
+        await msg.answer(text="𝐑𝐞𝐤𝐥𝐚𝐦𝐚 𝐲𝐮𝐛𝐨𝐫𝐢𝐬𝐡 𝐛𝐞𝐤𝐨𝐫 𝐪𝐢𝐥𝐢𝐧𝐝𝐢 🤖❌", reply_markup=admin_btn())
         await state.finish()
     else:
-        await msg.answer(text="Reklama jo'natish boshlandi!")
-        users = all_users()
+        await bot.send_chat_action(msg.chat.id, types.ChatActions.TYPING)
+        await msg.answer(text="𝐑𝐞𝐤𝐥𝐚𝐦𝐚 𝐲𝐮𝐛𝐨𝐫𝐢𝐬𝐡 𝐛𝐨𝐬𝐡𝐚𝐧𝐝𝐢 🤖✅")
         summa = 0
-        for i in users:
+        for i in all_users():
             if int(i[1]) != int(getenv("ADMIN")):
                 try:
                     await msg.copy_to(int(i[1]), caption=msg.caption, caption_entities=msg.caption_entities,
                                       reply_markup=msg.reply_markup)
                 except:  # noqa
                     summa += 1
-        await bot.send_message(int(getenv("ADMIN")), text=f"Botni Bloklagan userlar soni: {summa}")
+        await bot.send_chat_action(msg.chat.id, types.ChatActions.TYPING)
+        await bot.send_message(int(getenv("ADMIN")), text=f"𝐁𝐨𝐭𝐧𝐢 𝐁𝐥𝐨𝐤𝐥𝐚𝐠𝐚𝐧 𝐮𝐬𝐞𝐫𝐥𝐚𝐫 𝐬𝐨𝐧𝐢: {summa}",
+                               reply_markup=admin_btn())
         await state.finish()
 
 
 @dp.message_handler(Text("📈 Media Statistics"))
 async def media_statistic_handler(msg: types.Message):
     if msg.from_user.id == int(getenv("ADMIN")):
-        data = user_statistic()
+        data = media_statistic()
+        await bot.send_chat_action(msg.chat.id, types.ChatActions.TYPING)
         await msg.answer(text=data)
 
 
 @dp.message_handler(Text("👤 Find User"))
 async def find_user_handler(msg: types.Message):
     if msg.from_user.id == int(getenv("ADMIN")):
-        data = user_statistic()
-        await msg.answer(text=data)
+        await FindUser.user_id.set()
+        await bot.send_chat_action(msg.chat.id, types.ChatActions.TYPING)
+        await msg.answer(
+            text="𝚀𝚒𝚍𝚒𝚛𝚕𝚊𝚢𝚘𝚝𝚐𝚊𝚗 𝚞𝚜𝚎𝚛𝚐𝚊 𝚝𝚎𝚐𝚒𝚜𝚑𝚕𝚒 𝚃𝚎𝚕𝚎𝚐𝚛𝚊𝚖 𝙸𝙳 𝚔𝚒𝚛𝚒𝚝𝚒𝚗𝚐 🔎🤖", reply_markup=exit_btn())
+
+
+@dp.message_handler(state=FindUser.user_id)
+async def find_user_result_handler(msg: types.Message, state: FSMContext):
+    if msg.text == "❌":
+        await msg.answer(text="𝐔𝐬𝐞𝐫 𝐪𝐢𝐝𝐢𝐫𝐮𝐯𝐢 𝐛𝐞𝐤𝐨𝐫 𝐪𝐢𝐥𝐢𝐧𝐝𝐢 🔎🤖", reply_markup=admin_btn())
+        await state.finish()
+    else:
+        data = find_user(msg.text)
+        await bot.send_chat_action(msg.chat.id, types.ChatActions.TYPING)
+        await msg.answer(text=data, reply_markup=admin_btn())
+        await state.finish()
 
 
 @dp.message_handler()
 async def result_handler(msg: types.Message):
     await bot.send_chat_action(msg.chat.id, types.ChatActions.CHOOSE_STICKER)
-    await msg.answer_sticker(sticker=open(BASE + '/data/sticer.tgs', 'rb'))
+    await msg.answer_sticker(sticker=open(BASE + '/media/sticer.tgs', 'rb'))
     data = api.get_media(msg.text)
     await bot.delete_message(msg.from_user.id, msg.message_id + 1)
     if data and data['type'] == 'insta' and not data.get('post', False):
@@ -142,7 +163,8 @@ async def result_handler(msg: types.Message):
             await msg.answer_video(video=data['data'], caption=f"@Super_SaverBot - Orqali yuklab olindi!")
     else:
         await bot.send_chat_action(msg.chat.id, types.ChatActions.TYPING)
-        await msg.answer(text="Invalid Url ❌")
+        await msg.answer(
+            text="𝐁𝐮𝐧𝐝𝐚𝐲 𝐔𝐑𝐋 𝐦𝐚𝐧𝐳𝐢𝐥 𝐦𝐚𝐯𝐣𝐮𝐝 𝐞𝐦𝐚𝐬 𝐢𝐥𝐭𝐢𝐦𝐨𝐬 𝐭𝐞𝐤𝐬𝐡𝐢𝐫𝐢𝐛 𝐪𝐚𝐲𝐭𝐚𝐝𝐚𝐧 𝐲𝐮𝐛𝐨𝐫𝐢𝐧𝐠 🔎📂❌")
 
 
 async def startup(dp):
