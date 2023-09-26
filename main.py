@@ -139,28 +139,28 @@ async def result_handler(msg: types.Message):
     await bot.delete_message(msg.from_user.id, msg.message_id + 1)
     if data and data['type'] == 'insta' and not data.get('post', False):
         await bot.send_chat_action(msg.chat.id, types.ChatActions.UPLOAD_VIDEO)
-        await msg.answer_video(video=data['data'], caption=f"@Super_SaverBot - Orqali yuklab olindi!")
+        await msg.answer_video(video=data['data'], caption=f"@Super_SaverBot - 𝐎𝐫𝐪𝐚𝐥𝐢 𝐲𝐮𝐤𝐥𝐚𝐛 𝐨𝐥𝐢𝐧𝐝𝐢 📥")
     elif data and data['type'] == 'insta' and data.get('post', False):
         await bot.send_chat_action(msg.chat.id, types.ChatActions.UPLOAD_VIDEO)
         await msg.answer_media_group(media=data['data'])
     elif data and data['type'] == 'likee':
         await bot.send_chat_action(msg.chat.id, types.ChatActions.UPLOAD_VIDEO)
         await msg.answer_video(video=requests.get(url=data['data']).content,
-                               caption=f"@Super_SaverBot - Orqali yuklab olindi!")
+                               caption=f"@Super_SaverBot - 𝐎𝐫𝐪𝐚𝐥𝐢 𝐲𝐮𝐤𝐥𝐚𝐛 𝐨𝐥𝐢𝐧𝐝𝐢 📥")
     elif data and data['type'] == 'tiktok':
         await bot.send_chat_action(msg.chat.id, types.ChatActions.UPLOAD_VIDEO)
         await msg.answer_video(video=requests.get(url=data['data']).content,
-                               caption=f"@Super_SaverBot - Orqali yuklab olindi!")
+                               caption=f"@Super_SaverBot - 𝐎𝐫𝐪𝐚𝐥𝐢 𝐲𝐮𝐤𝐥𝐚𝐛 𝐨𝐥𝐢𝐧𝐝𝐢 📥")
     elif data and data['type'] == 'pin':
         if data['post'] == 'gif':
             await bot.send_chat_action(msg.chat.id, types.ChatActions.UPLOAD_PHOTO)
-            await msg.answer_animation(animation=data['data'], caption=f"@Super_SaverBot - Orqali yuklab olindi!")
+            await msg.answer_animation(animation=data['data'], caption=f"@Super_SaverBot - 𝐎𝐫𝐪𝐚𝐥𝐢 𝐲𝐮𝐤𝐥𝐚𝐛 𝐨𝐥𝐢𝐧𝐝𝐢 📥")
         elif data['post'] == 'image':
             await bot.send_chat_action(msg.chat.id, types.ChatActions.UPLOAD_PHOTO)
-            await msg.answer_photo(photo=data['data'], caption=f"@Super_SaverBot - Orqali yuklab olindi!")
+            await msg.answer_photo(photo=data['data'], caption=f"@Super_SaverBot - 𝐎𝐫𝐪𝐚𝐥𝐢 𝐲𝐮𝐤𝐥𝐚𝐛 𝐨𝐥𝐢𝐧𝐝𝐢 📥")
         elif data['post'] == 'video':
             await bot.send_chat_action(msg.chat.id, types.ChatActions.UPLOAD_VIDEO)
-            await msg.answer_video(video=data['data'], caption=f"@Super_SaverBot - Orqali yuklab olindi!")
+            await msg.answer_video(video=data['data'], caption=f"@Super_SaverBot - 𝐎𝐫𝐪𝐚𝐥𝐢 𝐲𝐮𝐤𝐥𝐚𝐛 𝐨𝐥𝐢𝐧𝐝𝐢 📥")
     else:
         await bot.send_chat_action(msg.chat.id, types.ChatActions.TYPING)
         await msg.answer(
