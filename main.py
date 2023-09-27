@@ -69,6 +69,8 @@ async def user_statistic_handler(msg: types.Message):
         data = user_statistic()
         await bot.send_chat_action(msg.chat.id, types.ChatActions.TYPING)
         await msg.answer(text=data)
+    else:
+        await msg.answer(text="𝗦𝗶𝘇 𝗮𝗱𝗺𝗶𝗻 𝗲𝗺𝗮𝘀𝘀𝗶𝘇 👨🏻‍💻❌", reply_markup=types.ReplyKeyboardRemove())
 
 
 @dp.message_handler(Text("🗣 Reklama"))
@@ -77,7 +79,8 @@ async def reklama_handler(msg: types.Message):
         await bot.send_chat_action(msg.chat.id, types.ChatActions.TYPING)
         await ReklamaState.rek.set()
         await msg.answer(text="𝐑𝐞𝐤𝐥𝐚𝐦𝐚 𝐓𝐚𝐫𝐪𝐚𝐭𝐢𝐬𝐡 𝐛𝐨'𝐥𝐢𝐦𝐢 🤖", reply_markup=exit_btn())
-
+    else:
+        await msg.answer(text="𝗦𝗶𝘇 𝗮𝗱𝗺𝗶𝗻 𝗲𝗺𝗮𝘀𝘀𝗶𝘇 👨🏻‍💻❌", reply_markup=types.ReplyKeyboardRemove())
 
 @dp.message_handler(state=ReklamaState.rek, content_types=types.ContentType.ANY)
 async def rek_state(msg: types.Message, state: FSMContext):
@@ -108,6 +111,8 @@ async def media_statistic_handler(msg: types.Message):
         data = media_statistic()
         await bot.send_chat_action(msg.chat.id, types.ChatActions.TYPING)
         await msg.answer(text=data)
+    else:
+        await msg.answer(text="𝗦𝗶𝘇 𝗮𝗱𝗺𝗶𝗻 𝗲𝗺𝗮𝘀𝘀𝗶𝘇 👨🏻‍💻❌", reply_markup=types.ReplyKeyboardRemove())
 
 
 @dp.message_handler(Text("👤 Find User"))
@@ -117,7 +122,8 @@ async def find_user_handler(msg: types.Message):
         await bot.send_chat_action(msg.chat.id, types.ChatActions.TYPING)
         await msg.answer(
             text="𝚀𝚒𝚍𝚒𝚛𝚕𝚊𝚢𝚘𝚝𝚐𝚊𝚗 𝚞𝚜𝚎𝚛𝚐𝚊 𝚝𝚎𝚐𝚒𝚜𝚑𝚕𝚒 𝚃𝚎𝚕𝚎𝚐𝚛𝚊𝚖 𝙸𝙳 𝚔𝚒𝚛𝚒𝚝𝚒𝚗𝚐 🔎🤖", reply_markup=exit_btn())
-
+    else:
+        await msg.answer(text="𝗦𝗶𝘇 𝗮𝗱𝗺𝗶𝗻 𝗲𝗺𝗮𝘀𝘀𝗶𝘇 👨🏻‍💻❌", reply_markup=types.ReplyKeyboardRemove())
 
 @dp.message_handler(state=FindUser.user_id)
 async def find_user_result_handler(msg: types.Message, state: FSMContext):

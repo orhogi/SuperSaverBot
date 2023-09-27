@@ -21,13 +21,13 @@ class Base:
         return cur.fetchall()
 
     def statistika(self):
-        query = f"SELECT * FROM {self.table} WHERE created_at <= DATE_TRUNC('month', CURRENT_DATE) + INTERVAL '1 month'"
+        query = f"SELECT * FROM {self.table} WHERE created_at >= DATE_TRUNC('month', CURRENT_DATE) - INTERVAL '1 month'"
         cur.execute(query)
         month = cur.fetchall()
-        query_week = f"SELECT * FROM {self.table} WHERE created_at <= DATE_TRUNC('week', CURRENT_DATE) + INTERVAL '1 week'"
+        query_week = f"SELECT * FROM {self.table} WHERE created_at >= DATE_TRUNC('week', CURRENT_DATE) - INTERVAL '1 week'"
         cur.execute(query_week)
         week = cur.fetchall()
-        query_day = f"SELECT * FROM {self.table} WHERE created_at <= DATE_TRUNC('day', CURRENT_DATE) + INTERVAL '1 day'"
+        query_day = f"SELECT * FROM {self.table} WHERE created_at >= DATE_TRUNC('day', CURRENT_DATE) - INTERVAL '1 day'"
         cur.execute(query_day)
         day = cur.fetchall()
         return {'month': month, 'week': week, 'day': day}
