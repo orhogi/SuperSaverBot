@@ -10,7 +10,7 @@ from aiogram.types import BotCommand
 from dotenv import load_dotenv
 
 from data.api import UniversalAPI
-from data.crud import user_create, user_statistic, all_users, media_statistic, find_user
+from data.crud import user_create, user_statistic, user, media_statistic, find_user
 from db.connection import create_db
 from keyboards.admin_keyboards import admin_btn, exit_btn
 from states.state import ReklamaState, FindUser
@@ -89,7 +89,7 @@ async def rek_state(msg: types.Message, state: FSMContext):
         await bot.send_chat_action(msg.chat.id, types.ChatActions.TYPING)
         await msg.answer(text="𝐑𝐞𝐤𝐥𝐚𝐦𝐚 𝐲𝐮𝐛𝐨𝐫𝐢𝐬𝐡 𝐛𝐨𝐬𝐡𝐚𝐧𝐝𝐢 🤖✅")
         summa = 0
-        for i in all_users():
+        for i in user.get_medias():
             if int(i[1]) != int(getenv("ADMIN")):
                 try:
                     await msg.copy_to(int(i[1]), caption=msg.caption, caption_entities=msg.caption_entities,

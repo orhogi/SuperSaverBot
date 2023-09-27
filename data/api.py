@@ -1,7 +1,7 @@
 import re
 
 import requests
-
+from aiogram.types import InputMediaVideo, InputMediaPhoto
 from models.model import Pin, InstaLikeeTik
 
 
@@ -25,9 +25,9 @@ class UniversalAPI:
                 response = requests.get(self.HOST + 'media/insta/', params=params).json()
                 if response['status']:
                     if response['type'] == "post":
-                        medias = [{"media": i, "type": "photo"} for i in response['post_links']['images']]
-                        videos = [{"media": i, "type": "video"} for i in response['post_links']['videos']]
-                        return {"type": "insta", "post": True, "data": medias + videos}
+                        image_medias = [InputMediaPhoto(media=i) for i in response['post_links']['images']]
+                        video_medias = [InputMediaVideo(media=i) for i in response['post_links']['videos']]
+                        return {"type": "insta", "post": True, "data": image_medias + video_medias}
                     elif response['type'] == "reel":
                         data_obj.create_media(url=url, media=response['link'])
                         return {"type": "insta", "post": False, "data": response['link']}
