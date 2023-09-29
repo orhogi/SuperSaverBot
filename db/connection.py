@@ -28,30 +28,30 @@ def create_db():
     insta_query = '''
     CREATE TABLE IF NOT EXISTS instagram(
         id BIGSERIAL PRIMARY KEY,
-        url VARCHAR(300) UNIQUE,
-        media VARCHAR(1000),
+        url TEXT UNIQUE,
+        media TEXT NOT NULL,
         created_at TIMESTAMP DEFAULT now()
         )'''
     pin_query = '''
     CREATE TABLE IF NOT EXISTS pinterest(
         id BIGSERIAL PRIMARY KEY,
-        url VARCHAR(300) UNIQUE,
-        media VARCHAR(1000),
+        url TEXT UNIQUE,
+        media TEXT NOT NULL,
         types VARCHAR(15) NOT NULL,
         created_at TIMESTAMP DEFAULT now()
         )'''
     tiktok_query = '''
     CREATE TABLE IF NOT EXISTS tiktok(
         id BIGSERIAL PRIMARY KEY,
-        url VARCHAR(300) UNIQUE,
-        media VARCHAR(1000),
+        url TEXT UNIQUE,
+        media TEXT NOT NULL,
         created_at TIMESTAMP DEFAULT now()
         )'''
     likee_query = '''
     CREATE TABLE IF NOT EXISTS likee(
         id BIGSERIAL PRIMARY KEY,
-        url VARCHAR(300) UNIQUE,
-        media VARCHAR(1000),
+        url TEXT UNIQUE,
+        media TEXT NOT NULL,
         created_at TIMESTAMP DEFAULT now()
         )'''
     cur.execute(query)
