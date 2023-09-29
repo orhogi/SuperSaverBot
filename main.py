@@ -140,9 +140,9 @@ async def find_user_result_handler(msg: types.Message, state: FSMContext):
 @dp.message_handler()
 async def result_handler(msg: types.Message):
     await bot.send_chat_action(msg.chat.id, types.ChatActions.CHOOSE_STICKER)
-    await msg.answer_sticker(sticker=open(BASE + '/media/sticer.tgs', 'rb'))
+    msg_sticer = await msg.answer_sticker(sticker=open(BASE + '/media/sticer.tgs', 'rb'))
     data = api.get_media(msg.text)
-    await bot.delete_message(msg.from_user.id, msg.message_id + 1)
+    await msg_sticer.delete()
     if data and data['type'] == 'insta' and not data.get('post', False):
         await bot.send_chat_action(msg.chat.id, types.ChatActions.UPLOAD_VIDEO)
         await msg.answer_video(video=data['data'], caption=f"@Super_SaverBot - 𝐎𝐫𝐪𝐚𝐥𝐢 𝐲𝐮𝐤𝐥𝐚𝐛 𝐨𝐥𝐢𝐧𝐝𝐢 📥")
