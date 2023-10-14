@@ -1,0 +1,27 @@
+version: "3.8"
+
+services:
+  bot:
+    build: .
+    restart: always
+    working_dir: /apps
+    container_name: supersaverbot
+    environment:
+      DB_PASS: black090
+      DB_HOST: pg
+      DB_PORT: 5432
+    command: python main.py
+    depends_on:
+      - pg
+  pg:
+    image: postgres:15.3-alpine
+    restart: always
+    container_name: super_db
+    environment:
+      POSTGRES_PASSWORD: black090
+    volumes:
+      - pg_data:/var/lib/postgres/data
+    ports:
+      - "5432:5432"
+volumes:
+  pg_data:

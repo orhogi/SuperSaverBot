@@ -25,8 +25,8 @@ class UniversalAPI:
                 response = requests.get(self.HOST + 'media/insta/', params=params).json()
                 if response['status']:
                     if response['type'] == "post":
-                        image_medias = [InputMediaPhoto(media=i, caption="@Super_SaverBot - 𝐎𝐫𝐪𝐚𝐥𝐢 𝐲𝐮𝐤𝐥𝐚𝐛 𝐨𝐥𝐢𝐧𝐝𝐢 📥" if v == 0 else None) for v, i in enumerate(response['post_links']['images'])]
-                        video_medias = [InputMediaVideo(media=i, caption="@Super_SaverBot - 𝐎𝐫𝐪𝐚𝐥𝐢 𝐲𝐮𝐤𝐥𝐚𝐛 𝐨𝐥𝐢𝐧𝐝𝐢 📥" if not image_medias and v == 0 else None) for v, i in enumerate(response['post_links']['videos'])]
+                        image_medias = [InputMediaPhoto(media=i, caption="@super_saverbot - 𝐎𝐫𝐪𝐚𝐥𝐢 𝐲𝐮𝐤𝐥𝐚𝐛 𝐨𝐥𝐢𝐧𝐝𝐢 📥" if v == 0 else None) for v, i in enumerate(response['post_links']['images'])]
+                        video_medias = [InputMediaVideo(media=i, caption="@super_saverbot - 𝐎𝐫𝐪𝐚𝐥𝐢 𝐲𝐮𝐤𝐥𝐚𝐛 𝐨𝐥𝐢𝐧𝐝𝐢 📥" if not image_medias and v == 0 else None) for v, i in enumerate(response['post_links']['videos'])]
                         all_media = image_medias + video_medias
                         return {"type": "insta", "post": True, "data": all_media}
                     elif response['type'] == "reel":
