@@ -14,7 +14,7 @@ class UniversalAPI:
     TIK_MOBILE = r'https://vt\.tiktok\.com/[A-Za-z0-9]+/'
     PIN_POST = r"https://pin\.it/(\w+)"
     PIN_VIDEO = r"https://www\.pinterest\.[a-z]+/(\w+)/"
-    HOST = 'https://allsaver.onrender.com/'
+    HOST = 'http://185.217.131.159/'
 
     def get_media(self, url):
         if re.match(self.INSTA_POST, url) or re.match(self.INSTA_REEL, url):
@@ -70,14 +70,14 @@ class UniversalAPI:
                 response = requests.get(self.HOST + 'media/pin/', params=params).json()
                 if response['status']:
                     if response['type'] == 'image':
-                        if response['link'][0][-4:] == '.gif':
-                            data_obj.create_media(url=url, media=response['link'][0], types="gif")
-                            return {"type": "pin", "post": 'gif', "data": response['link'][0]}
-                        data_obj.create_media(url=url, media=response['link'][0], types="image")
-                        return {"type": "pin", "post": 'image', "data": response['link'][0]}
+                        if response['link'][1][-4:] == '.gif':
+                            data_obj.create_media(url=url, media=response['link'][1], types="gif")
+                            return {"type": "pin", "post": 'gif', "data": response['link'][1]}
+                        data_obj.create_media(url=url, media=response['link'][1], types="image")
+                        return {"type": "pin", "post": 'image', "data": response['link'][1]}
                     elif response['type'] == 'video':
-                        data_obj.create_media(url=url, media=response['link'][0], types="video")
-                        return {"type": "pin", "post": 'video', "data": response['link'][0]}
+                        data_obj.create_media(url=url, media=response['link'][1], types="video")
+                        return {"type": "pin", "post": 'video', "data": response['link'][1]}
                 else:
                     return False
             else:

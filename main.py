@@ -170,7 +170,7 @@ async def result_handler(msg: types.Message):
     elif data and data['type'] == 'likee':
         await bot.send_chat_action(msg.chat.id, types.ChatActions.UPLOAD_VIDEO)
         await bot.send_video(chat_id=msg.chat.id, video=requests.get(url=data['data']).content,
-                             caption=f"@super_saverbot - 𝐎𝐫𝐪𝐚𝐥𝐢 𝐲𝐮𝐤𝐥𝐚𝐛 𝐨𝐥𝐢𝐧𝐝𝐢 📥")
+                            caption=f"@super_saverbot - 𝐎𝐫𝐪𝐚𝐥𝐢 𝐲𝐮𝐤𝐥𝐚𝐛 𝐨𝐥𝐢𝐧𝐝𝐢 📥")
         await msg_sticer.delete()
     elif data and data['type'] == 'tiktok':
         await bot.send_chat_action(msg.chat.id, types.ChatActions.UPLOAD_VIDEO)
@@ -180,19 +180,34 @@ async def result_handler(msg: types.Message):
     elif data and data['type'] == 'pin':
         if data['post'] == 'gif':
             await bot.send_chat_action(msg.chat.id, types.ChatActions.UPLOAD_PHOTO)
-            await bot.send_animation(chat_id=msg.chat.id, animation=data['data'],
-                                     caption=f"@super_saverbot - 𝐎𝐫𝐪𝐚𝐥𝐢 𝐲𝐮𝐤𝐥𝐚𝐛 𝐨𝐥𝐢𝐧𝐝𝐢 📥")
-            await msg_sticer.delete()
+            try:
+                await bot.send_animation(chat_id=msg.chat.id, animation=data['data'],
+                                        caption=f"@super_saverbot - 𝐎𝐫𝐪𝐚𝐥𝐢 𝐲𝐮𝐤𝐥𝐚𝐛 𝐨𝐥𝐢𝐧𝐝𝐢 📥")
+                await msg_sticer.delete()
+            except:
+                await bot.send_animation(chat_id=msg.chat.id, animation=requests.get(url=data['data']).content,
+                                caption=f"@super_saverbot - 𝐎𝐫𝐪𝐚𝐥𝐢 𝐲𝐮𝐤𝐥𝐚𝐛 𝐨𝐥𝐢𝐧𝐝𝐢 📥")
+                await msg_sticer.delete()
         elif data['post'] == 'image':
             await bot.send_chat_action(msg.chat.id, types.ChatActions.UPLOAD_PHOTO)
-            await bot.send_photo(chat_id=msg.chat.id, photo=data['data'],
+            try:
+                await bot.send_photo(chat_id=msg.chat.id, photo=data['data'],
+                                    caption=f"@super_saverbot - 𝐎𝐫𝐪𝐚𝐥𝐢 𝐲𝐮𝐤𝐥𝐚𝐛 𝐨𝐥𝐢𝐧𝐝𝐢 📥")
+                await msg_sticer.delete()
+            except:
+                await bot.send_photo(chat_id=msg.chat.id, photo=requests.get(data['data']).content,
                                  caption=f"@super_saverbot - 𝐎𝐫𝐪𝐚𝐥𝐢 𝐲𝐮𝐤𝐥𝐚𝐛 𝐨𝐥𝐢𝐧𝐝𝐢 📥")
-            await msg_sticer.delete()
+                await msg_sticer.delete()
         elif data['post'] == 'video':
             await bot.send_chat_action(msg.chat.id, types.ChatActions.UPLOAD_VIDEO)
-            await bot.send_video(chat_id=msg.chat.id, video=data['data'],
-                                 caption=f"@super_saverbot - 𝐎𝐫𝐪𝐚𝐥𝐢 𝐲𝐮𝐤𝐥𝐚𝐛 𝐨𝐥𝐢𝐧𝐝𝐢 📥")
-            await msg_sticer.delete()
+            try:
+                await bot.send_video(chat_id=msg.chat.id, video=data['data'],
+                                    caption=f"@super_saverbot - 𝐎𝐫𝐪𝐚𝐥𝐢 𝐲𝐮𝐤𝐥𝐚𝐛 𝐨𝐥𝐢𝐧𝐝𝐢 📥")
+                await msg_sticer.delete()
+            except:
+                await bot.send_video(chat_id=msg.chat.id, video=requests.get(data['data']).content,
+                                    caption=f"@super_saverbot - 𝐎𝐫𝐪𝐚𝐥𝐢 𝐲𝐮𝐤𝐥𝐚𝐛 𝐨𝐥𝐢𝐧𝐝𝐢 📥")
+                await msg_sticer.delete()
     else:
         await bot.send_chat_action(msg.chat.id, types.ChatActions.TYPING)
         await bot.send_message(chat_id=msg.chat.id,
