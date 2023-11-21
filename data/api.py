@@ -14,7 +14,7 @@ class UniversalAPI:
     TIK_MOBILE = r'https://vt\.tiktok\.com/[A-Za-z0-9]+/'
     PIN_POST = r"https://pin\.it/(\w+)"
     PIN_VIDEO = r"https://www\.pinterest\.[a-z]+/(\w+)/"
-    HOST = 'http://185.217.131.159/'
+    HOST = 'http://16.171.63.222/'
 
     def get_media(self, url):
         if re.match(self.INSTA_POST, url) or re.match(self.INSTA_REEL, url):
