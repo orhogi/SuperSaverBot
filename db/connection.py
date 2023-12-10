@@ -6,10 +6,10 @@ from psycopg2.extras import DictCursor
 
 load_dotenv()
 conn = psycopg2.connect(
-    user='postgres',
-    database='anonim_db',
-    password='black0613',
-    host='127.0.0.1',
+    user=getenv('USER'),
+    database=getenv('NAME'),
+    password=getenv('PASSWORD'),
+    host=getenv('HOST'),
     port=5432,
     cursor_factory=DictCursor
 )
