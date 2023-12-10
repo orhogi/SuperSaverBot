@@ -12,7 +12,7 @@ users = [
     "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/116.0.0.0 Safari/537.36"]
 
 
-async def instagram_media(url: str):
+def instagram_media(url: str):
     post = r'https://www\.instagram\.com/p/([A-Za-z0-9-_]+)'
     reel = r'https://www\.instagram\.com/(reel|reels)/([A-Za-z0-9-_]+)'
     if not re.match(post, url) and not re.match(reel, url):
@@ -55,7 +55,7 @@ async def instagram_media(url: str):
         pass
 
 
-async def pinterest_media(url: str):
+def pinterest_media(url: str):
     pin_regex = r"https://pin\.it/(\w+)"
     board_regex = r"https://www\.pinterest\.[a-z]+/(\w+)/"
     if not re.match(pin_regex, url) and not re.match(board_regex, url):
@@ -92,7 +92,7 @@ async def pinterest_media(url: str):
             return {"status": False, "type": None, "message": "Bad request"}
 
 
-async def tiktok_media(url: str):
+def tiktok_media(url: str):
     post = r'https://www\.tiktok\.com/@[A-Za-z0-9_-]+/video/([0-9]+)'
     mobile = r'https://vt\.tiktok\.com/[A-Za-z0-9]+/'
     if not re.match(post, url) and not re.match(mobile, url):
@@ -117,7 +117,7 @@ async def tiktok_media(url: str):
     return {"status": True, "developer": "Oybek Rozievich", "type": "mp4", "video": video, "music": music}
 
 
-async def likee_media(url: str):
+def likee_media(url: str):
     post = r"https:\/\/likee\.video\/@[\w-]+\/video\/\d+"
     reel = r"https://l\.likee\.video/v/(\w+)"
     if not re.match(post, url) and not re.match(reel, url):
