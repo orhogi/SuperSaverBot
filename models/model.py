@@ -1,21 +1,20 @@
 from db.connection import cur, conn
 
-
-class Base:
-    def __init__(self, table):
+class User:
+    def __init__(self, table) -> None:
         self.table = table
 
-    def get_media(self, url: str):
-        query = f"SELECT * FROM {self.table} WHERE url = %s"
-        cur.execute(query, (url,))
-        return cur.fetchone()
-
-    def delete_media(self, url: str):
-        query = f"DELETE FROM {self.table} WHERE url = %s"
-        cur.execute(query, (url,))
+    def create_user(self, telegram_id: int, username: str, first_name: str):
+        query = f"INSERT INTO {self.table}(telegram_id, username, first_name) VALUES (%s, %s, %s)"
+        cur.execute(query, (str(telegram_id), username, first_name))
         conn.commit()
 
-    def get_medias(self):
+    def get_user(self, telegram_id: int):
+        query = f"SELECT * FROM {self.table} WHERE telegram_id = %s"
+        cur.execute(query, (str(telegram_id),))
+        return cur.fetchone()
+
+    def get_users(self):
         query = f"SELECT * FROM {self.table}"
         cur.execute(query)
         return cur.fetchall()
@@ -31,50 +30,29 @@ class Base:
         cur.execute(query_day)
         day = cur.fetchall()
         return {'month': month, 'week': week, 'day': day}
+    
 
+class Channel:
+    def __init__(self, table) -> None:
+        self.table = table
 
-class User(Base):
-
-    def create_user(self, telegram_id: int, username: str, first_name: str):
-        query = f"INSERT INTO {self.table}(telegram_id, username, first_name) VALUES (%s, %s, %s)"
-        cur.execute(query, (str(telegram_id), username, first_name))
+    def create_data(self, username: str):
+        query = f"INSERT INTO {self.table}(username) VALUES (%s)"
+        cur.execute(query, (username, ))
         conn.commit()
-
-    def update_user(self, telegram_id: int, username: str, first_name: str):
-        query = f"UPDATE {self.table} SET telegram_id = %s, username = %s, first_name = %s WHERE telegram_id = %s"
-        cur.execute(query, (str(telegram_id), username, first_name))
+    
+    def delete_data(self, username: int):
+        query = f"DELETE FROM {self.table} WHERE username = %s"
+        cur.execute(query, (username,))
         conn.commit()
-
-    def delete_user(self, telegram_id: int):
-        query = f"DELETE FROM {self.table} WHERE telegram_id = %s"
-        cur.execute(query, (telegram_id,))
-        conn.commit()
-
-    def get_user(self, telegram_id: int):
-        query = f"SELECT * FROM {self.table} WHERE telegram_id = %s"
-        cur.execute(query, (str(telegram_id),))
+    
+    def get_data(self, username: int):
+        query = f"SELECT * FROM {self.table} WHERE username = %s"
+        cur.execute(query, (username,))
         return cur.fetchone()
-
-
-class Pin(Base):
-    def create_media(self, url: str, media: str, types: str):
-        query = f"INSERT INTO {self.table}(url, media, types) VALUES (%s, %s, %s)"
-        cur.execute(query, (url, media, types))
-        conn.commit()
-
-    def update_media(self, url: str, media: str, types: str):
-        query = f"UPDATE {self.table} SET url = %s, media = %s, post = %s, types = %s WHERE url = %s"
-        cur.execute(query, (url, media, types, url))
-        conn.commit()
-
-
-class InstaLikeeTik(Base):
-    def create_media(self, url: str, media: str):
-        query = f"INSERT INTO {self.table}(url, media) VALUES (%s, %s)"
-        cur.execute(query, (url, media))
-        conn.commit()
-
-    def update_media(self, url: str, media: str):
-        query = f"UPDATE {self.table} SET url = %s, media = %s WHERE url = %s"
-        cur.execute(query, (url, media, url))
-        conn.commit()
+    
+    def get_datas(self):
+        query = f"SELECT * FROM {self.table}"
+        cur.execute(query)
+        return cur.fetchall()
+    

@@ -7,3 +7,11 @@ class ReklamaState(StatesGroup):
 
 class FindUser(StatesGroup):
     user_id = State()
+
+
+class AddChannelState(StatesGroup):
+    username = State()
+
+
+class DeleteChannelState(StatesGroup):
+    username = State()

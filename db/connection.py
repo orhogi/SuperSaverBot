@@ -6,7 +6,7 @@ from psycopg2.extras import DictCursor
 
 load_dotenv()
 conn = psycopg2.connect(
-    user=getenv('USER'),
+    user="postgres",
     database=getenv('NAME'),
     password=getenv('PASSWORD'),
     host=getenv('HOST'),
@@ -26,37 +26,11 @@ def create_db():
         created_at TIMESTAMP DEFAULT now()
         )'''
     insta_query = '''
-    CREATE TABLE IF NOT EXISTS instagram(
+    CREATE TABLE IF NOT EXISTS channels(
         id BIGSERIAL PRIMARY KEY,
-        url TEXT UNIQUE,
-        media TEXT NOT NULL,
-        created_at TIMESTAMP DEFAULT now()
-        )'''
-    pin_query = '''
-    CREATE TABLE IF NOT EXISTS pinterest(
-        id BIGSERIAL PRIMARY KEY,
-        url TEXT UNIQUE,
-        media TEXT NOT NULL,
-        types VARCHAR(15) NOT NULL,
-        created_at TIMESTAMP DEFAULT now()
-        )'''
-    tiktok_query = '''
-    CREATE TABLE IF NOT EXISTS tiktok(
-        id BIGSERIAL PRIMARY KEY,
-        url TEXT UNIQUE,
-        media TEXT NOT NULL,
-        created_at TIMESTAMP DEFAULT now()
-        )'''
-    likee_query = '''
-    CREATE TABLE IF NOT EXISTS likee(
-        id BIGSERIAL PRIMARY KEY,
-        url TEXT UNIQUE,
-        media TEXT NOT NULL,
+        username TEXT UNIQUE,
         created_at TIMESTAMP DEFAULT now()
         )'''
     cur.execute(query)
     cur.execute(insta_query)
-    cur.execute(pin_query)
-    cur.execute(tiktok_query)
-    cur.execute(likee_query)
     conn.commit()
