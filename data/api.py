@@ -1,9 +1,8 @@
 import re
-
 import requests
 from aiogram.types import InputMediaVideo, InputMediaPhoto
 from models.model import Pin, InstaLikeeTik
-
+from download_media import instagram_media, pinterest_media, tiktok_media, likee_media
 
 class UniversalAPI:
     INSTA_POST = r'https://www\.instagram\.com/p/([A-Za-z0-9-_]+)'
@@ -14,15 +13,13 @@ class UniversalAPI:
     TIK_MOBILE = r'https://vt\.tiktok\.com/[A-Za-z0-9]+/'
     PIN_POST = r"https://pin\.it/(\w+)"
     PIN_VIDEO = r"https://www\.pinterest\.[a-z]+/(\w+)/"
-    HOST = 'http://16.171.63.222/'
 
     def get_media(self, url):
         if re.match(self.INSTA_POST, url) or re.match(self.INSTA_REEL, url):
             data_obj = InstaLikeeTik('instagram')
             data = data_obj.get_media(url)
             if not data:
-                params = {'url': url}
-                response = requests.get(self.HOST + 'media/insta/', params=params).json()
+                response = instagram_media(url=url)
                 if response['status']:
                     if response['type'] == "post":
                         image_medias = [InputMediaPhoto(media=i, caption="@super_saverbot - 𝐎𝐫𝐪𝐚𝐥𝐢 𝐲𝐮𝐤𝐥𝐚𝐛 𝐨𝐥𝐢𝐧𝐝𝐢 📥" if v == 0 else None) for v, i in enumerate(response['post_links']['images'])]
@@ -40,8 +37,7 @@ class UniversalAPI:
             data_obj = InstaLikeeTik('likee')
             data = data_obj.get_media(url)
             if not data:
-                params = {'url': url}
-                response = requests.get(self.HOST + 'media/likee/', params=params).json()
+                response = likee_media(url=url)
                 if response['status']:
                     data_obj.create_media(url=url, media=response['link'])
                     return {"type": "likee", "post": False, "data": response['link']}
@@ -53,8 +49,7 @@ class UniversalAPI:
             data_obj = InstaLikeeTik('tiktok')
             data = data_obj.get_media(url)
             if not data:
-                params = {'url': url}
-                response = requests.get(self.HOST + 'media/tiktok/', params=params).json()
+                response = tiktok_media(url=url)
                 if response['status']:
                     data_obj.create_media(url=url, media=response['video'])
                     return {"type": "tiktok", "data": response['video']}
@@ -66,8 +61,7 @@ class UniversalAPI:
             data_obj = Pin('pinterest')
             data = data_obj.get_media(url)
             if not data:
-                params = {'url': url}
-                response = requests.get(self.HOST + 'media/pin/', params=params).json()
+                response = pinterest_media(url=url)
                 if response['status']:
                     if response['type'] == 'image':
                         if response['link'][1][-4:] == '.gif':
