@@ -147,7 +147,7 @@ async def find_user_result_handler(msg: types.Message, state: FSMContext):
 @dp.message_handler()
 async def result_handler(msg: types.Message):
     await bot.send_chat_action(msg.chat.id, types.ChatActions.CHOOSE_STICKER)
-    msg_sticer = await bot.send_sticker(chat_id=msg.chat.id, sticker=open(BASE + '/media/sticer.tgs', 'rb'))
+    msg_sticer = await bot.send_message(chat_id=msg.chat.id, text="⏳")
     data = api.get_media(msg.text)
     if data and data['type'] == 'insta' and not data.get('post', False):
         await bot.send_chat_action(msg.chat.id, types.ChatActions.UPLOAD_VIDEO)
